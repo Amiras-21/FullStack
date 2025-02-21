@@ -1,0 +1,63 @@
+
+.todoContainer {
+  max-width: 600px;
+  margin-left: 400px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+.mainContainer{
+background-color:'#8600f3' ;
+height:'100px' ;
+width:'100%';
+}
+
+.inputContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.inputField {
+  width: 80%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.addButton {
+  color: white;
+  cursor: pointer;
+}
+
+.taskList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.taskItem {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+
+.taskItem div {
+  display: flex;
+  align-items: center;
+}
+
+.deleteButton {
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
