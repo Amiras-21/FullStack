@@ -56,13 +56,22 @@ export default function Home() {
           // const token = Math.random().toString(36).substring(7);
           // document.cookie = `token=${token}; path=/; Secure;`;
           alert(response.message);
-          if (response.role && response.role.trim() === "admin"){
-            console.log('Redirecting to admin-panel');
-            router.push("/dashboard");
-          } else {
-            console.log('Redirecting to home');
-            router.push("/dashboard");
-          }
+         
+
+          if (response.role && response.role.trim() === "superadmin") {
+            console.log('Redirecting to superadmin-panel');
+            router.push("/dashboard/super-admin");
+        } else if (response.role && response.role.trim() === "admin") {
+            console.log('Redirecting to admin panel');
+            router.push(`/dashboard/admin/${response.userId}`);
+        } else if (response.role && response.role.trim() === "trainer") {
+            console.log('Redirecting to trainer panel');
+            router.push(`/dashboard/trainer/${response.userId}`);
+        } else {
+            console.log('Redirecting to user dashboard');
+            router.push(`/dashboard/user/${response.userId}`);
+        }
+        
 
           
         } catch (error) {

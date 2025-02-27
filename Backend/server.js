@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const trainerRoutes = require('./routes/trainerRoutes');
+const userRoutes = require('./routes/userRoutes')
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,6 +19,9 @@ app.use(bodyParser.json());
 
 
 app.use('/api/auth', authRoutes);
+app.use('/api/auth', adminRoutes);
+app.use('/api/auth', trainerRoutes);
+app.use('/api/auth', userRoutes);
 
 mongoose.connect('mongodb://localhost:27017/login', {
   useNewUrlParser: true,
