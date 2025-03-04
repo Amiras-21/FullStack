@@ -197,8 +197,32 @@ export const authApi = createApi({
         body: userData,
       }),
     }),
+
+    sendInvitationEmail: builder.mutation({
+      query: (emailData) => ({
+        url: "/email",
+        method: "POST",
+        body: emailData,
+      }),
+    }),
+
+    acceptInvitation: builder.mutation({
+      query: (token) => ({
+        url: "/accept-invitation",
+        method: "POST",
+        body: { token },
+      }),
+    }),
+
+    resetPassword: builder.mutation({
+      query: ({ token, newPassword }) => ({
+        url: "/reset-password",
+        method: "POST",
+        body: { token, newPassword },
+      }),
+    }),
   }),
 });
 
 
-export const { useGetUserByIdQuery, useCreateAdminMutation, useCreateTrainerMutation, useCreateUserMutation, useSignupMutation, useLoginUserMutation, useGetUsersQuery, useGetTrainersQuery, useGetAdminsQuery, useAddUserMutation, useDeleteUserMutation, useDeleteAdminMutation, useDeleteTrainerMutation, useUpdateAdminMutation, useUpdateTrainerMutation,  useUpdateUserMutation } = authApi;
+export const { useResetPasswordMutation, useAcceptInvitationMutation,  useSendInvitationEmailMutation,  useGetUserByIdQuery, useCreateAdminMutation, useCreateTrainerMutation, useCreateUserMutation, useSignupMutation, useLoginUserMutation, useGetUsersQuery, useGetTrainersQuery, useGetAdminsQuery, useAddUserMutation, useDeleteUserMutation, useDeleteAdminMutation, useDeleteTrainerMutation, useUpdateAdminMutation, useUpdateTrainerMutation,  useUpdateUserMutation } = authApi;

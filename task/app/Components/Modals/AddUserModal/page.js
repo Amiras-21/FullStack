@@ -13,75 +13,19 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import { useCreateAdminMutation, useCreateTrainerMutation, useCreateUserMutation } from "@/app/store/authApi";
+import { useCreateAdminMutation, useCreateTrainerMutation, useCreateUserMutation, useSendInvitationEmailMutation } from "@/app/store/authApi";
 
 export default function AddUserModal({ open, onClose, adminId, trainerId, defaultRole = "admin" }) {
   const { register, handleSubmit, reset } = useForm();
-  const [role, setRole] = useState(defaultRole); // Default role
+  const [role, setRole] = useState(defaultRole); 
 
 
-  // API Mutations
+
   const [createAdmin] = useCreateAdminMutation();
   const [createTrainer] = useCreateTrainerMutation();
   const [createUser] = useCreateUserMutation();
+  const [sendInvitationEmail] = useSendInvitationEmailMutation()
 
-//   const onSubmit = async (formData) => {
-//     try {
-
-//       let response;
-//       if (role === "admin") {
-//         response = await createAdmin({ ...formData }).unwrap();
-//       } else if (role === "trainer") {
-//         response = await createTrainer({ ...formData, adminId }).unwrap();
-//       } else if (role === "user") {
-//         response = await createUser({ ...formData }).unwrap();
-//       }
-
-//       if (response) {
-//         alert(`${role.charAt(0).toUpperCase() + role.slice(1)} added successfully!`);
-//         reset();
-//         onClose();
-//       } else {
-//         throw new Error("Invalid response format");
-//       }
-//     } catch (error) {
-//       console.error("Error adding user:", error);
-//       alert("Failed to add user.");
-//     }
-//   };
-
-
-// const onSubmit = async (formData) => {
-//     try {
-//       let response;
-//       if (role === "admin") {
-//         response = await createAdmin({ ...formData }).unwrap();
-//       } else if (role === "trainer") {
-//         if (!selectedAdminId) {
-//           alert("Please select an Admin for this Trainer.");
-//           return;
-//         }
-//         response = await createTrainer({ ...formData, adminId: selectedAdminId }).unwrap();
-//       } else if (role === "user") {
-//         if (!selectedTrainerId) {
-//           alert("Please select a Trainer for this User.");
-//           return;
-//         }
-//         response = await createUser({ ...formData, trainerId: selectedTrainerId }).unwrap();
-//       }
-
-//       if (response) {
-//         alert(`${role.charAt(0).toUpperCase() + role.slice(1)} added successfully!`);
-//         reset();
-//         onClose();
-//       } else {
-//         throw new Error("Invalid response format");
-//       }
-//     } catch (error) {
-//       console.error("Error adding user:", error);
-//       alert("Failed to add user.");
-//     }
-//   };
 
 const onSubmit = async (formData) => {
     try {
@@ -103,6 +47,18 @@ const onSubmit = async (formData) => {
         response = await createUser({ ...formData, trainerId }).unwrap();
       }
 
+      // Call the Redux mutation to send the email
+      const emailResponse = await sendInvitationEmail({
+        email: formData.email,
+        firstName: formData.firstName,
+        trainerId,
+      }).unwrap();
+
+      if (!emailResponse.success) {
+        alert("User added but email failed to send.");
+      }
+    
+
       if (response) {
         alert(`${role.charAt(0).toUpperCase() + role.slice(1)} added successfully!`);
         reset();
@@ -120,7 +76,7 @@ const onSubmit = async (formData) => {
       <DialogTitle>Add {role.charAt(0).toUpperCase() + role.slice(1)}</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Role Selection */}
+       
           <FormControl fullWidth margin="normal">
             <InputLabel>Select Role</InputLabel>
             <Select
@@ -134,17 +90,17 @@ const onSubmit = async (formData) => {
             </Select>
           </FormControl>
 
-          {/* User Fields */}
+      
           <TextField label="First Name" fullWidth margin="normal" {...register("firstName", { required: true })} />
           <TextField label="Email" fullWidth margin="normal" {...register("email", { required: true })} />
           <TextField label="Password" type="password" fullWidth margin="normal" {...register("password", { required: true })} />
 
-            {/* Hidden Admin ID */}
+           
           {role === "trainer" && (
             <input type="hidden" value={adminId} {...register("adminId")} />
           )}
 
-          {/* Hidden Trainer ID */}
+         
           {role === "user" && (
             <input type="hidden" value={trainerId} {...register("trainerId")} />
           )}

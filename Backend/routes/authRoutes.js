@@ -115,6 +115,51 @@ const jwt = require('jsonwebtoken');
 // });
 
 
+router.post("/reset-password", async (req, res) => {
+  try {
+    // const {email, newPassword } = req.body;
+    const { token, newPassword } = req.body;
+
+     // ✅ Verify Token
+     const decoded = jwt.verify(token, "your_secret_key");
+     if (!decoded || !decoded.email) {
+         return res.status(400).json({ error: "Invalid or Expired Token ❌" });
+     }
+
+      // ✅ Find User by Email & Token
+      const user = await User.findOne({ email: decoded.email });
+      if (!user) {
+          return res.status(404).json({ error: "User not found ❌" });
+      }
+
+
+  // const user = await User.findOne({ email });
+  // if (!user) {
+  //     return res.status(404).json({ error: "User not found" });
+  // }
+
+    
+      user.password = newPassword;
+      user.status = "active";
+      await user.save();
+
+
+      // Update Password in DB
+      // await User.findOneAndUpdate(
+      //   { email: decoded.email },
+      //   { password:  newPassword },
+      //   { new: true }
+      // );
+
+      res.json({ success: true, message: "Password Reset Successfully ✅" });
+   
+
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 router.post('/signup', async (req, res) => {
   
   let { firstName, email, password, role} = req.body;
@@ -170,9 +215,30 @@ router.post('/login', async (req, res) => {
     }
     
     if (user) {
+      // if (user.status !== "active") {
+      //   return res.status(403).json({ message: "Your account is inactive. Contact support." });
+      // } 
+
       if (user.status !== "active") {
-        return res.status(403).json({ message: "Your account is inactive. Contact support." });
-      }
+        let message = "Your account status does not allow this action.";
+    
+        switch (user.status) {
+            case "Invitation Sent":
+                message = "Your invitation is pending. Please check your email to accept the invitation.";
+                break;
+            case "Invitation Accepted":
+                message = "You have accepted the invitation, but your password is not set. Please reset your password.";
+                break;
+            case "password not set":
+                message = "Your password is not set. Please reset your password to activate your account.";
+                break;
+            case "inactive":
+                message = "Your account is inactive. Contact support.";
+                break;
+        }
+    
+        return res.status(403).json({ message });
+    }
 
       if (password === user.password) {
 

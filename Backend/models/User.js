@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   role: { type: String, default: "user" }, 
-  status: { type: String, enum: ["active", "inactive"], default: "active" },
+  status: { type: String, enum: ["active", "inactive", "Invitation Accepted", "password not set"], default: "active" },
   trainerId: { type: mongoose.Schema.Types.ObjectId, ref: "Trainer", required: true },
 });
 
