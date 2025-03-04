@@ -146,9 +146,14 @@ export default function Home() {
             >
               Login
             </Button>
-            <div>
+            <div className="text-left">
               <p>
-                New user? <Link href="/register">Sign Up</Link>
+                 <Link href="/forgotPassword">Forgot Password?</Link>
+              </p>
+            </div>
+            <div className="text-left">
+              <p>
+                New user? <Link href="/register" >Sign Up</Link>
               </p>
             </div>
           </form>

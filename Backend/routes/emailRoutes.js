@@ -8,8 +8,8 @@ router.post("/email", sendInvitationEmail);
 
 router.post("/accept-invitation", async (req, res) => {
     try {
-      const { token } = req.body;
-  
+      const {  } = req.body;
+  token
       if (!token) {
         return res.status(400).json({ error: "Token is required" });
       }

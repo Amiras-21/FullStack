@@ -221,8 +221,16 @@ export const authApi = createApi({
         body: { token, newPassword },
       }),
     }),
+
+    forgotPassword: builder.mutation({
+      query: ({ email , password }) => ({
+        url: "/forgot-password",
+        method: "POST",
+        body: { email , password},
+      }),
+    }),
   }),
 });
 
 
-export const { useResetPasswordMutation, useAcceptInvitationMutation,  useSendInvitationEmailMutation,  useGetUserByIdQuery, useCreateAdminMutation, useCreateTrainerMutation, useCreateUserMutation, useSignupMutation, useLoginUserMutation, useGetUsersQuery, useGetTrainersQuery, useGetAdminsQuery, useAddUserMutation, useDeleteUserMutation, useDeleteAdminMutation, useDeleteTrainerMutation, useUpdateAdminMutation, useUpdateTrainerMutation,  useUpdateUserMutation } = authApi;
+export const {useForgotPasswordMutation, useResetPasswordMutation, useAcceptInvitationMutation,  useSendInvitationEmailMutation,  useGetUserByIdQuery, useCreateAdminMutation, useCreateTrainerMutation, useCreateUserMutation, useSignupMutation, useLoginUserMutation, useGetUsersQuery, useGetTrainersQuery, useGetAdminsQuery, useAddUserMutation, useDeleteUserMutation, useDeleteAdminMutation, useDeleteTrainerMutation, useUpdateAdminMutation, useUpdateTrainerMutation,  useUpdateUserMutation } = authApi;

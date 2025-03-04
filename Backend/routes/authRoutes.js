@@ -5,6 +5,7 @@ const Trainer = require('../models/Trainer');
 const SuperAdmin = require('../models/SuperAdmin');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const { forgotPassword } = require("../controllers/ForgotPasswordController");
 
 // router.get('/users',  async (req, res) => {
 //   try {
@@ -114,6 +115,7 @@ const jwt = require('jsonwebtoken');
 //   }
 // });
 
+router.post("/forgot-password", forgotPassword);
 
 router.post("/reset-password", async (req, res) => {
   try {
