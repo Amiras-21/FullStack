@@ -8,16 +8,41 @@ router.post("/email", sendInvitationEmail);
 
 router.post("/accept-invitation", async (req, res) => {
     try {
-      const {  } = req.body;
-  token
+      const { token } = req.body;
+ 
       if (!token) {
         return res.status(400).json({ error: "Token is required" });
       }
   
-      jwt.verify(token, "your_secret_key", async (err, decoded) => {
-        if (err) {
-          return res.status(400).json({ error: "Link Expired " });
+      // jwt.verify(token, "your_secret_key", async (err, decoded) => {
+      //   if (err) {
+      //     return res.status(400).json({ error: "Link Expired " });
+      //   }
+
+      // Extract email before verifying the token
+    let decodedEmail;
+    try {
+      const decoded = jwt.decode(token); // Decode first without verifying
+      decodedEmail = decoded?.email;
+    } catch (decodeError) {
+      console.error("Error decoding token:", decodeError);
+    }
+
+    jwt.verify(token, "your_secret_key", async (err, decoded) => {
+      if (err) {
+        console.log("Token verification failed, updating status...");
+
+        // If token expired, update status
+        if (decodedEmail) {
+          const expiredUser = await User.findOne({ email: decodedEmail });
+          if (expiredUser) {
+            expiredUser.status = "password not set";
+            await expiredUser.save();
+            console.log(`User ${expiredUser.email} status updated to "password not set" due to expired token.`);
+          }
         }
+        return res.status(400).json({ error: "Link Expired ❌" });
+      }
 
         const user = await User.findOne({ email: decoded.email });
         if (!user) {
@@ -26,7 +51,7 @@ router.post("/accept-invitation", async (req, res) => {
 
         
         user.status = "Invitation Accepted";
-        // ✅ Generate a new token for password reset (valid for 10 minutes)
+       
         const resetToken = jwt.sign(
           { email: user.email }, 
           "your_secret_key", 

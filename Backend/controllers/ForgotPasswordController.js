@@ -1,6 +1,15 @@
 const nodemailer = require("nodemailer");
 const User = require("../models/User");
 
+// Function to generate a simple random password
+const generateRandomPassword = (length = 8) => {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    password += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return password;
+};
 
 exports.forgotPassword = async (req, res) => {
     try {
@@ -8,8 +17,24 @@ exports.forgotPassword = async (req, res) => {
 
       const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ error: "User not found ❌" });
+      return res.status(404).json({ error: "User not found " });
     }
+
+    if (user.status === "Invitation Sent") {
+      return res.status(400).json({ error: "Cannot reset password. User has not accepted the invitation yet. " });
+    }
+
+   // Generate a new password if the user's password is empty
+   let newPassword = user.password;
+   if (!user.password) {
+     newPassword = generateRandomPassword(10); // Generates a simple 10-character password
+     user.password = newPassword;
+   }
+
+   // Update user status to "Active"
+   user.status = "active";
+   await user.save();
+
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -29,7 +54,7 @@ exports.forgotPassword = async (req, res) => {
           <p>Hello,</p>
           <p>You requested to reset your password.</p>
           <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Password:</strong> ${user.password}</p>
+         <p><strong>Password:</strong> ${newPassword}</p>
 
           <p>If you did not request this, please ignore this email.</p>
           <p>Best Regards, <br/> Your App Team</p>
