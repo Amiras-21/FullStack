@@ -71,7 +71,7 @@ const onSubmit = async (formData) => {
       </IconButton>
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Edit {role.charAt(0).toUpperCase() + role.slice(1)}</DialogTitle>
+        <DialogTitle>Edit {role ?role.charAt(0).toUpperCase() + role.slice(1): "User"}</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextField label="Name" fullWidth margin="normal" {...register("firstName")} />
