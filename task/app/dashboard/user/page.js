@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import DashboardLayout from "../../layout/page";
+import DashboardLayout from "@/app/dashboard/layout/page";
 import { useGetUserByIdQuery, useUpdateUserMutation } from "@/app/store/authApi";
 import { TextField, Button, CircularProgress } from "@mui/material";
 
