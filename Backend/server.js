@@ -13,7 +13,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // app.use(cors());
-app.use(cors({ origin: 'http://localhost:3000' }));
+// app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: "https://https://track-4-rho.vercel.app/", credentials: true }));
 
 app.use(bodyParser.json());
 // app.use(express.json());
