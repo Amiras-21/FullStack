@@ -1,5 +1,4 @@
 const User = require('../models/User');
-const bcrypt = require('bcrypt');
 
 exports.getUserById = async (req, res) => {
     try {
@@ -11,7 +10,7 @@ exports.getUserById = async (req, res) => {
       }
       
       const response = { 
-        results: { ...users.toObject(), id: users._id } 
+        results: { ...users.toObject(), id: users._id, password:"******"} 
       };
   
       res.json(response);
