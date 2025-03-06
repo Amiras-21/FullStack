@@ -2,7 +2,7 @@
 
 import { useAcceptInvitationMutation } from "@/app/store/authApi";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect,Suspense  } from "react";
 
 const AcceptInvitation = () => {
     const searchParams = useSearchParams();
@@ -40,9 +40,12 @@ const AcceptInvitation = () => {
   }, [token, acceptInvitation]);
 
   return (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>
-      {isLoading ? <h2>Processing...</h2> : <h2>Checking Invitation...</h2>}
-    </div>
+    // <div style={{ textAlign: "center", marginTop: "20px" }}>
+    //   {isLoading ? <h2>Processing...</h2> : <h2>Checking Invitation...</h2>}
+    // </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <AcceptInvitation />
+    </Suspense>
   );
 };
 
