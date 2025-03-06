@@ -19,8 +19,6 @@ export default function AddUserModal({ open, onClose, adminId, trainerId, defaul
   const { register, handleSubmit, reset } = useForm();
   const [role, setRole] = useState(defaultRole); 
 
-
-
   const [createAdmin] = useCreateAdminMutation();
   const [createTrainer] = useCreateTrainerMutation();
   const [createUser] = useCreateUserMutation();
