@@ -19,7 +19,8 @@ export default function Sidebar({ menuItems }) {
       <div>
         <h2 className="text-lg font-bold mb-5">Dashboard</h2>
 
-        {menuItems.map((item, index) => (
+        {menuItems.length > 0 ? (
+        menuItems.map((item, index) => (
           <button
             key={index}
             onClick={() => router.push(item.path)}
@@ -29,7 +30,10 @@ export default function Sidebar({ menuItems }) {
           >
             {item.label}
           </button>
-        ))}
+        )) 
+      ) : (
+          <p className="text-gray-400">No menu items available</p>
+        )}
       </div>
 
       <Button variant="contained" color="secondary" className="mt-auto" onClick={handleLogout}>
