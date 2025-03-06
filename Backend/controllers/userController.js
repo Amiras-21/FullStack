@@ -15,11 +15,11 @@ exports.getUsersByTrainer = async (req, res) => {
       .limit(Number(pageSize));
 
       const response = { 
-        results: users.map((user) => ({ ...user.toObject(), id: user._id })), 
+        results: users.map((user) => ({ ...user.toObject(), id: user._id, password: "********" })), 
         pagination: { total_data: totalUsers, page, pageSize } 
       };
   
-      console.log("🚀 Backend Response:", response);
+      
   
       res.json(response);
     // res.json({ users, page_information: { total_data: totalUsers, page, pageSize } });

@@ -5,7 +5,13 @@ const Trainer = require('../models/Trainer');
 const SuperAdmin = require('../models/SuperAdmin');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
 const { forgotPassword } = require("../controllers/ForgotPasswordController");
+
+const hashPassword = async (password) => {
+  const saltRounds = 10;
+  return await bcrypt.hash(password, saltRounds);
+};
 
 // router.get('/users',  async (req, res) => {
 //   try {
@@ -140,8 +146,9 @@ router.post("/reset-password", async (req, res) => {
   //     return res.status(404).json({ error: "User not found" });
   // }
 
-    
-      user.password = newPassword;
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  user.password = hashedPassword;
+      // user.password = newPassword;
       user.status = "active";
       await user.save();
 
@@ -180,11 +187,13 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
+    const hashedPassword = await hashPassword(password);
+
     
     const newUser = new User({
       firstName,
       email,
-      password,
+      password : hashedPassword,
       role : "user",
       status: "active",
       signupMethod : "user",
@@ -197,7 +206,6 @@ router.post('/signup', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
 
 router.post('/login', async (req, res) => {
   let { email, password } = req.body;
@@ -214,6 +222,10 @@ router.post('/login', async (req, res) => {
     }
     if (!user) {
       user = await Trainer.findOne({ email });
+    }
+
+    if (!user) {
+      return res.status(400).json({ message: "user not found" });
     }
     
     if (user) {
@@ -242,10 +254,18 @@ router.post('/login', async (req, res) => {
         return res.status(403).json({ message });
     }
 
-      if (password === user.password) {
+    if (!user.password) {
+      return res.status(400).json({ message: "Your password is not set. Please use Forgot Password to set a new password." });
+    }
+
+      // if (password === user.password){ 
+      const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
 
         const token = jwt.sign(
-          { userId: user._id, role: user.role },
+          { userId: user._id, role: user.role, trainerId: user.trainerId || user._id, adminId:user.adminId || user._id, },
           'your_jwt_secret_key',
           { expiresIn: '1h' }
         );
@@ -256,14 +276,15 @@ router.post('/login', async (req, res) => {
           role: user.role,
           userId:user._id,
         });
-      } else {
-        console.log("Password does not match!");
-        return res.status(400).json({ message: 'Invalid credentials' });
+      // } else {
+      //   console.log("Password does not match!");
+      //   return res.status(400).json({ message: 'Invalid credentials' });
+      // }
+    // } else {
+    //   console.log("User not found!");
+    //   return res.status(400).json({ message: 'Invalid credentials' });
+    // }
       }
-    } else {
-      console.log("User not found!");
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
   } catch (err) {
     console.error('Login error:', err);
     res.status(500).json({ message: 'Server error' });

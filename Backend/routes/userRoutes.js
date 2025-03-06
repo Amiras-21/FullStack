@@ -3,7 +3,8 @@ const { getUsersByTrainer } = require("../controllers/userController");
 const {getUserById} = require("../controllers/useridController");
 const router = express.Router();
 const User = require('../models/User');
-const Trainer = require('../models/Trainer')
+const Trainer = require('../models/Trainer');
+const bcrypt = require("bcrypt");
 
 
 router.get("/users/trainer/:trainerId", getUsersByTrainer);
@@ -42,6 +43,10 @@ router.put("/users/:id", async (req, res) => {
     if (firstName) updatedUser.firstName = firstName;
       if (email) updatedUser.email = email;
       if (status) updatedUser.status = status;
+      if (password) {
+        const salt = await bcrypt.genSalt(10);
+        updatedUser.password = await bcrypt.hash(password, salt);
+      }
       await updatedUser.save();
   
     res.json(updatedUser);

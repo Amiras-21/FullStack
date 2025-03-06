@@ -15,11 +15,10 @@ exports.getTrainersByAdmin = async (req, res) => {
       .limit(Number(pageSize));
 
       const response = { 
-        results: trainers.map((trainer) => ({ ...trainer.toObject(), id: trainer._id })), 
+        results: trainers.map((trainer) => ({ ...trainer.toObject(), id: trainer._id, password: "********" })), 
         pagination: { total_data: totalTrainers, page, pageSize } 
       };
   
-      console.log("🚀 Backend Response:", response); // Debugging log
   
       res.json(response);
 

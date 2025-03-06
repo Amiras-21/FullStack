@@ -1,7 +1,8 @@
 "use client";
 
 import { useState,  useEffect } from "react";
-import { useParams } from "next/navigation";import DataTable from "@/app/Components/Tables/page";
+import { useParams } from "next/navigation";
+import DataTable from "@/app/Components/Tables/page";
 import DashboardLayout from "@/app/dashboard/layout/page";
 import AddButton from "@/app/Components/AddButton/page";
 import AddUserModal from "@/app/Components/Modals/AddUserModal/page";

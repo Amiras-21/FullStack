@@ -86,13 +86,38 @@
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import Sidebar from "@/app/Components/Sidebar/page";
+import { jwtDecode } from "jwt-decode"
 
 export default function DashboardLayout({ children }) {
   const [userRole, setUserRole] = useState(null);
+  const [trainerId, settrainerId] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [adminId, setAdminId] = useState(null);
 
   useEffect(() => {
-    const role = Cookies.get("role");
-    setUserRole(role);
+    const token = Cookies.get("token");
+    
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setUserRole(decodedToken.role); 
+
+        if (decodedToken.role === "user") {
+          setUserId(decodedToken.userId);
+        }
+        
+        if (decodedToken.role === "trainer") {
+          settrainerId(decodedToken.trainerId);
+        }
+
+        if (decodedToken.role === "admin") {
+          setAdminId(decodedToken.adminId); 
+        }
+
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
   }, []);
 
   // Define menu items based on user role
@@ -101,26 +126,22 @@ export default function DashboardLayout({ children }) {
       case "superadmin":
         return [
           { label: "Dashboard", path: "/dashboard" },
-          { label: "Manage Users", path: "/dashboard/super-admin" },
-          { label: "Admins", path: "/dashboard/super-admin/[adminId]" },
-          { label: "Trainers", path: "/dashboard/trainers" },
-          { label: "Users", path: "/dashboard/users" },
+          { label: "Manage", path: "/dashboard/super-admin" },
         ];
       case "admin":
         return [
           { label: "Dashboard", path: "/dashboard" },
-          { label: "Manage Trainers", path: "/dashboard/trainers" },
-          { label: "Manage Users", path: "/dashboard/users" },
+          { label: "Manage Trainers", path: `/dashboard/admin/${adminId}` },
         ];
       case "trainer":
         return [
           { label: "Dashboard", path: "/dashboard" },
-          { label: "My Students", path: "/dashboard/my-students" },
+          { label: "My Users", path:`/dashboard/trainer/${trainerId}` },
         ];
       case "user":
         return [
           { label: "Dashboard", path: "/dashboard" },
-          { label: "My Profile", path: "/dashboard/profile" },
+          { label: "My Profile", path: `/dashboard/user/${userId}` },
         ];
       default:
         return [{ label: "Dashboard", path: "/dashboard" }];

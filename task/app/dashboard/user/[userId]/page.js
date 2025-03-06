@@ -94,7 +94,7 @@ export default function UserDetailsPage() {
                 value={user.email}
                 fullWidth
                 margin="normal"
-                disabled // Email cannot be edited
+                disabled 
               />
               <div className="flex gap-2 mt-4">
                 <Button variant="contained" color="primary" onClick={handleSave}>

@@ -8,6 +8,7 @@ const trainerRoutes = require('./routes/trainerRoutes');
 const userRoutes = require('./routes/userRoutes')
 const emailRoutes = require("./routes/emailRoutes");
 
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 

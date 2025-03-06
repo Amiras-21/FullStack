@@ -8,6 +8,7 @@ import { useGetAdminsQuery, useGetTrainersQuery, useGetUsersQuery } from "@/app/
 import EditButton from "../EditButton/page";
 import DeleteButton from "../DeleteButton/page";
 
+
 export default function DataTable() {
   
   
@@ -16,6 +17,8 @@ export default function DataTable() {
   const [rows, setRows] = useState([]);
   // const role = adminId ? (trainerId ? "user" : "trainer") : "admin";
   const role = trainerId ? "user" : adminId ? "trainer" : "admin";
+
+  const [refreshKey, setRefreshKey] = useState(0);
   
 
   const [search, setSearch] = useState("");
@@ -23,14 +26,18 @@ export default function DataTable() {
 
   const [paginationModel, setPaginationModel] = useState({ pageSize: 5, page: 0 });
 
+ 
+
   const handleDelete = (id) => {
     setRows((prev) => prev.filter((row) => row.id !== id)); 
+    setRefreshKey((prev) => prev + 1);
   };
 
   const handleEdit = (updatedAdmin) => {
     setRows((prev) =>
       prev.map((row) => (row.id === updatedAdmin._id ? { ...row, ...updatedAdmin } : row))
     );
+    setRefreshKey((prev) => prev + 1);
   };
 
   
@@ -113,7 +120,11 @@ export default function DataTable() {
   });
 
   useEffect(() => {
-    console.log("Fetched data before updating state:", data);
+    refetch();
+  }, [refreshKey, paginationModel, adminId, trainerId, refetch]);
+
+  useEffect(() => {
+    // console.log("Fetched data before updating state:", data);
 
     if (data) {
       const newData = adminId
@@ -122,7 +133,7 @@ export default function DataTable() {
           : data?.trainers?.map((item) => ({ ...item, id: item._id })) || []
         : data?.admins?.map((item) => ({ ...item, id: item._id })) || [];
   
-      console.log("Setting Rows Data:", newData);
+      // console.log("Setting Rows Data:", newData);
       setRows(newData);
     }
   }, [data]);
@@ -141,9 +152,9 @@ export default function DataTable() {
   //   }
   // }, [data]);
 
-  useEffect(() => {
-    refetch();
-  }, [paginationModel, adminId, trainerId, refetch]);
+  // useEffect(() => {
+  //   refetch();
+  // }, [paginationModel, adminId, trainerId, refetch]);
 
   if (isLoading) return <CircularProgress />;
   if (error) return <p>Error fetching data.</p>;
@@ -191,10 +202,6 @@ export default function DataTable() {
   //   : data?.admins?.map((item) => ({ ...item, id: item._id })) || []
   // : []}
 
-  
-  
-
-     
         columns={columns}
         paginationMode="server"
         paginationModel={paginationModel}
@@ -210,6 +217,7 @@ export default function DataTable() {
           },
         }}
       />
+     
     </div>
   );
 }

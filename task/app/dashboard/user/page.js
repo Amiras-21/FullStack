@@ -13,7 +13,7 @@ export default function UserDetailsPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
-    lastName: "",
+    email: "",
     password: "",
     confirmPassword: "",
   });
@@ -25,7 +25,7 @@ export default function UserDetailsPage() {
   const handleEditClick = () => {
     setFormData({
       firstName: user.firstName,
-      lastName: user.lastName,
+      email: user.email,
       password: user.password,
       confirmPassword: user.password,
     });

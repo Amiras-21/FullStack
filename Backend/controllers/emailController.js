@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 exports.sendInvitationEmail = async (req, res) => {
   const { email, firstName } = req.body;
@@ -11,16 +12,14 @@ exports.sendInvitationEmail = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        // user: process.env.EMAIL_USER,
-        // pass: process.env.EMAIL_PASS,
-        user : "amiras09mxmx09@gmail.com",
-        pass : "lrit iozv vivs ygko"
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+        
       },
     });
 
     const mailOptions = {
-      // from: process.env.EMAIL_USER,
-      from : "amiras09mxmx09@gmail.com",
+      from: process.env.EMAIL_USER,
       to: email,
       subject: "Invitation to Join",
       html: `

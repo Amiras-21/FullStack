@@ -15,11 +15,10 @@ exports.getAdmins = async (req, res) => {
       .limit(Number(pageSize));
 
       const response = { 
-        results: admins.map((admin) => ({ ...admin.toObject(), id: admin._id })), 
+        results: admins.map((admin) => ({ ...admin.toObject(), id: admin._id, password: "********" })), 
         pagination: { total_data: totalAdmins, page, pageSize } 
       };
   
-      console.log("🚀 Backend Response:", response); // Debugging log
   
       res.json(response);
 

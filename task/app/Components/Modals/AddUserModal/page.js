@@ -47,7 +47,6 @@ const onSubmit = async (formData) => {
         response = await createUser({ ...formData, trainerId }).unwrap();
       }
 
-      // Call the Redux mutation to send the email
       const emailResponse = await sendInvitationEmail({
         email: formData.email,
         firstName: formData.firstName,
@@ -93,7 +92,7 @@ const onSubmit = async (formData) => {
       
           <TextField label="First Name" fullWidth margin="normal" {...register("firstName", { required: true })} />
           <TextField label="Email" fullWidth margin="normal" {...register("email", { required: true })} />
-          <TextField label="Password" type="password" fullWidth margin="normal" {...register("password", { required: true })} />
+          {/* <TextField label="Password" type="password" fullWidth margin="normal" {...register("password", { required: true })} /> */}
 
            
           {role === "trainer" && (
