@@ -3,7 +3,7 @@ import { useRouter, usePathname } from "next/navigation";
 import Cookies from "js-cookie";
 import { Button } from "@mui/material";
 
-export default function Sidebar({ menuItems }) {
+export default function Sidebar({ menuItems = [] }) {
   const router = useRouter();
   const pathname = usePathname();
 
