@@ -4,7 +4,7 @@ const {getUserById} = require("../controllers/useridController");
 const router = express.Router();
 const User = require('../models/User');
 const Trainer = require('../models/Trainer');
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 
 router.get("/users/trainer/:trainerId", getUsersByTrainer);

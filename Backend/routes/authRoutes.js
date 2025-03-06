@@ -5,7 +5,7 @@ const Trainer = require('../models/Trainer');
 const SuperAdmin = require('../models/SuperAdmin');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const { forgotPassword } = require("../controllers/ForgotPasswordController");
 
 const hashPassword = async (password) => {
