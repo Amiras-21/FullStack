@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5000;
 // app.use(cors());
 // app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(cors({ 
-  origin: ["http://localhost:3000","https://track-4-rho.vercel.app"], 
+  origin: ["http://localhost:3000","https://track-4-rho.vercel.app", "https://track-4-pi.vercel.app"], 
   credentials: true, 
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"] }));
