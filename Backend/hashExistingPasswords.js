@@ -1,13 +1,14 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 // Import Models
 const User = require("./models/User");
 const Trainer = require("./models/Trainer");
 const Admin = require("./models/Admin");
-// const SuperAdmin = require("./models/SuperAdmin");
+const SuperAdmin = require("./models/SuperAdmin");
 
-const MONGO_URI = "mongodb://localhost:27017/login"; // Update if needed
+// const MONGO_URI = "mongodb://localhost:27017/login"; 
+const MONGO_URI = "mongodb+srv://amiras09mxmx09:F5LgIlpiXhAIvbc9@track-4-cluster.3kpxl.mongodb.net/login?retryWrites=true&w=majority";
 
 async function hashPasswordsForModel(Model, modelName) {
   try {
@@ -43,7 +44,7 @@ async function hashAllPasswords() {
     await hashPasswordsForModel(User, "User");
     await hashPasswordsForModel(Trainer, "Trainer");
     await hashPasswordsForModel(Admin, "Admin");
-    // await hashPasswordsForModel(SuperAdmin, "SuperAdmin");
+    await hashPasswordsForModel(SuperAdmin, "SuperAdmin");
 
     console.log("✅ All plaintext passwords have been hashed.");
   } catch (error) {
