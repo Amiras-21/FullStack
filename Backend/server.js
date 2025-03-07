@@ -46,20 +46,20 @@ mongoose.connect(DB_CONNECT, {
   .catch((err) => console.log(err));
 
   mongoose.connection.on("connected", () => {
-    console.log("✅ Connected to MongoDB");
+    console.log(" Connected to MongoDB");
   });
   
   mongoose.connection.on("error", (err) => {
-    console.error("❌ MongoDB connection error:", err);
+    console.error(" MongoDB connection error:", err);
   });
   
   mongoose.connection.on("disconnected", () => {
-    console.log("⚠️ MongoDB disconnected");
+    console.log(" MongoDB disconnected");
   });
 
   // Global error handler (to log detailed errors)
 app.use((err, req, res, next) => {
-  console.error("🔥 Unhandled Server Error:", err);
+  console.error(" Unhandled Server Error:", err);
   res.status(500).json({ message: 'Server error', error: err.message });
 });
 
