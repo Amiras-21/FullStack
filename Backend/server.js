@@ -7,10 +7,12 @@ const adminRoutes = require('./routes/adminRoutes');
 const trainerRoutes = require('./routes/trainerRoutes');
 const userRoutes = require('./routes/userRoutes')
 const emailRoutes = require("./routes/emailRoutes");
+const dotenv = require('dotenv');
 
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const DB_CONNECT = process.env.DB_CONNECT || 'mongodb://localhost:27017/login'; 
 
 // app.use(cors());
 // app.use(cors({ origin: 'http://localhost:3000' }));
@@ -31,7 +33,9 @@ app.use('/api/auth', trainerRoutes);
 app.use('/api/auth', userRoutes);
 app.use("/api/auth", emailRoutes);
 
-mongoose.connect('mongodb://localhost:27017/login', {
+dotenv.config();
+
+mongoose.connect(DB_CONNECT, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
