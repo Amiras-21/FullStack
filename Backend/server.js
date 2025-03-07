@@ -16,6 +16,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const DB_CONNECT = process.env.DB_CONNECT || 'mongodb://localhost:27017/login'; 
 
+console.log("DB_CONNECT:", DB_CONNECT);
+
 // app.use(cors());
 // app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(cors({ 
@@ -36,14 +38,30 @@ app.use('/api/auth', userRoutes);
 app.use("/api/auth", emailRoutes);
 
 
-
-
 mongoose.connect(DB_CONNECT, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log(err));
+
+  mongoose.connection.on("connected", () => {
+    console.log("✅ Connected to MongoDB");
+  });
+  
+  mongoose.connection.on("error", (err) => {
+    console.error("❌ MongoDB connection error:", err);
+  });
+  
+  mongoose.connection.on("disconnected", () => {
+    console.log("⚠️ MongoDB disconnected");
+  });
+
+  // Global error handler (to log detailed errors)
+app.use((err, req, res, next) => {
+  console.error("🔥 Unhandled Server Error:", err);
+  res.status(500).json({ message: 'Server error', error: err.message });
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
